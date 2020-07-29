@@ -1,8 +1,10 @@
 package com.example.memorableplaces;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPreferences= this.getSharedPreferences("com.example.memorableplaces", Context.MODE_PRIVATE);
+        final SharedPreferences sharedPreferences= this.getSharedPreferences("com.example.memorableplaces", Context.MODE_PRIVATE);
 
         ArrayList<String> lats= new ArrayList<>();
         ArrayList<String> longs= new ArrayList<>();
@@ -87,6 +89,50 @@ public class MainActivity extends AppCompatActivity {
 
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) { // for removal
                 Toast.makeText(MainActivity.this, locationList.get(i), Toast.LENGTH_SHORT).show();
+
+                final int removeIndex=i;
+
+
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Remove Location?")
+                        .setMessage("Are you sure you want to delete "+locationList.get(i)+"?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                locationList.remove(removeIndex);
+                                locations.remove(removeIndex);
+                                arrayAdapter.remove(removeIndex);
+                                listView.setAdapter(arrayAdapter);
+                                try {
+
+                                    sharedPreferences.edit().putString("places", ObjectSerializer.serialize(locationList)).apply(); // for the location Strings
+
+                                    ArrayList<String> latNums= new ArrayList<>();
+                                    ArrayList<String> longNums= new ArrayList<>();
+
+                                    for(LatLng coord: locations){
+                                        latNums.add(coord.latitude+"");
+                                        longNums.add(coord.longitude+"");
+
+
+                                    }
+                                    sharedPreferences.edit().putString("lats", ObjectSerializer.serialize(latNums)).apply();
+                                    sharedPreferences.edit().putString("longs", ObjectSerializer.serialize(longNums)).apply();
+
+
+                                }
+                                catch(Exception e){
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
 
 //                locationList.remove(i);
 //                locations.remove(i);
