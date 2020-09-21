@@ -3,8 +3,6 @@ Original App Design by Rob Percival and Nick Walter from their
 [Complete Android Oreo Developer Course.](https://www.udemy.com/course/the-complete-android-oreo-developer-course/) 
 
 
-Description:
-Save Your Google Map Locations in one entire list.
 
 
 
