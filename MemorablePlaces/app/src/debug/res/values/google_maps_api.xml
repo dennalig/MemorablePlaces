@@ -21,4 +21,6 @@
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDtk-aRVjxzK1vriLnr7nt_1SlzMt9IUh4</string>
+
+    <!-- add the environment variable somehow-->
 </resources>
